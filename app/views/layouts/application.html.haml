@@ -1,0 +1,91 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title MSahay
+    %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_importmap_tags
+    %link{crossorigin: "anonymous", href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css", integrity: "sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=", rel: "stylesheet"}/
+  %body
+    .container-fuild
+      .main-body.p-0
+        .inner-wrapper
+          / Inner sidebar
+          .inner-sidebar
+            / Inner sidebar header
+            .inner-sidebar-header.justify-content-center.font-weight-bold
+              mSahay
+            / /Inner sidebar header
+            / Inner sidebar body
+            .inner-sidebar-body.p-0
+              .p-3.h-100{"data-simplebar" => "init"}
+                .simplebar-wrapper{style: "margin: -16px;"}
+                  .simplebar-height-auto-observer-wrapper
+                    .simplebar-height-auto-observer
+                  .simplebar-mask
+                    .simplebar-offset{style: "right: 0px; bottom: 0px;"}
+                      .simplebar-content-wrapper{style: "height: 100%; overflow: hidden scroll;"}
+                        .simplebar-content{style: "padding: 16px;"}
+                          %nav.nav.nav-pills.nav-gap-y-1.flex-column
+                            %a.nav-link.nav-link-faded.has-icon.active{href: "javascript:void(0)"} All Threads
+                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Popular this week
+                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Popular all time
+                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Solved
+                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Unsolved
+                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} No replies yet
+                  .simplebar-placeholder{style: "width: 234px; height: 292px;"}
+                .simplebar-track.simplebar-horizontal{style: "visibility: hidden;"}
+                  .simplebar-scrollbar{style: "width: 0px; display: none;"}
+                .simplebar-track.simplebar-vertical{style: "visibility: visible;"}
+                  .simplebar-scrollbar{style: "height: 151px; display: block; transform: translate3d(0px, 0px, 0px);"}
+          .inner-main
+            .row
+              .inner-main-header.w-100
+                .col-md-3.d-none
+                  %a.nav-link.nav-icon.rounded-circle.nav-link-faded.mr-3.d-md-none{"data-toggle" => "inner-sidebar", href: "#"}
+                    %i.material-icons arrow_forward_ios
+                .col-md-3.d-none
+                  %select.custom-select.custom-select-sm.w-auto.mr-1
+                    %option{selected: "selected"} Latest
+                    %option{value: "1"} Popular
+                    %option{value: "3"} Solved
+                    %option{value: "3"} Unsolved
+                    %option{value: "3"} No Replies Yet
+                .col-md-8
+                  %span.input-icon.input-icon-sm.ml-auto
+                    .row
+                      .col-md-6
+                        %input.form-control.bg-gray-200.border-gray-200.shadow-none.mb-4.mt-4{placeholder: "Search Tickets", type: "text"}
+                      .col-md-4
+                        %button.btn.btn-primary.mb-4.mt-4 Search
+                .col-md-4
+                  %button.btn.btn-success.has-icon.float-right{"data-target" => "#threadModal", "data-toggle" => "modal", type: "button"}
+                    %svg.feather.feather-plus.mr-2{fill: "none", height: "24", stroke: "currentColor", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", viewbox: "0 0 24 24", width: "24", xmlns: "http://www.w3.org/2000/svg"}
+                      %line{x1: "12", x2: "12", y1: "5", y2: "19"}
+                      %line{x1: "5", x2: "19", y1: "12", y2: "12"}
+                    CREATE TICKET
+            .inner-main-body.p-2.p-sm-3.collapse.forum-content.show
+              = yield
+            / New Thread Modal
+            #threadModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "threadModalLabel", role: "dialog", tabindex: "-1"}
+              .modal-dialog.modal-lg{role: "document"}
+                .modal-content
+                  %form
+                    .modal-header.d-flex.align-items-center.bg-primary.text-white
+                      %h6#threadModalLabel.modal-title.mb-0 New Discussion
+                      %button.close{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"}
+                        %span{"aria-hidden" => "true"} ×
+                    .modal-body
+                      .form-group
+                        %label{for: "threadTitle"} Title
+                        %input#threadTitle.form-control{autofocus: "", placeholder: "Enter title", type: "text"}/
+                      %textarea.form-control.summernote{style: "display: none;"}
+                      .custom-file.form-control-sm.mt-3{style: "max-width: 300px;"}
+                        %input#customFile.custom-file-input{multiple: "multiple", type: "file"}/
+                        %label.custom-file-label{for: "customFile"} Attachment
+                    .modal-footer
+                      %button.btn.btn-light{"data-dismiss" => "modal", type: "button"} Cancel
+                      %button.btn.btn-primary{type: "button"} Post

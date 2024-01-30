@@ -1,0 +1,34 @@
+%h1 My Tickets
+.table-responsive
+  %table.table.table-hover{style: 'background-color: white;'}
+    %thead
+      %tr
+        %th{scope: "col"} #Ticket No
+        %th{scope: "col"} Subject
+        %th{scope: "col"} Created On
+        %th{scope: "col"} Status
+        %th{scope: "col"} Source
+    %tbody
+      - @tickets.each do |ticket|
+        %tr
+          %th{scope: "row"}= ticket.id
+          %td
+            = link_to ticket.subject.truncate(80), ticket_path(id: ticket.id)
+          %td= ticket.created_at.strftime('%b-%d-%Y %H:%M')
+          %td{class: status_klass(ticket.status) }= ticket.status
+          %td= ticket.via['channel'].eql?('api') ? 'web' : ticket.via['channel']
+%button.btn.btn-primary{"data-target" => "#exampleModal", "data-toggle" => "modal", type: "button"}
+  Launch demo modal
+/ Modal
+#exampleModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", role: "dialog", tabindex: "-1"}
+  .modal-dialog{role: "document"}
+    .modal-content
+      .modal-header
+        %h5#exampleModalLabel.modal-title Modal title
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"}
+          %span{"aria-hidden" => "true"} ×
+      .modal-body
+        \...
+      .modal-footer
+        %button.btn.btn-secondary{"data-dismiss" => "modal", type: "button"} Close
+        %button.btn.btn-primary{type: "button"} Save changes
