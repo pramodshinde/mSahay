@@ -1,45 +1,48 @@
-.container
-  .card.mb-2
-    .card-body.p-2.p-sm-3
-      .media.forum-item
-        %a{"data-target" => ".forum-content", "data-toggle" => "collapse", href: "#"}
-          %img.mr-3.rounded-circle{alt: "User", src: "https://bootdey.com/img/Content/avatar/avatar1.png", width: "50"}/
-        .media-body
-          %h5
-            = "Subject: #{@ticket.subject}"
-          %p
-            %a.text-muted{"data-target" => ".forum-content", "data-toggle" => "collapse", href: "" }= "Created by #{@ticket.submitter.name}"
-          - if @ticket.assignee
-            %p.text-muted
-              %a{href: "javascript:void(0)"}= @ticket.assignee.name
-              responded on
-              %span.text-secondary.font-weight-bold= "#{@comments.last.created_at.to_date}, #{@comments.last.created_at.strftime("%H:%M")}"
-      .timeline-footer
-        %a.m-r-15.text-inverse-lighter.text-success{href: "javascript:;"}
-          %i.fa.fa-thumbs-up.fa-fw.m-r-3
-        %a.m-r-15.text-inverse-lighter{href: "javascript:;"}
-          %span
-            %i.far.fa-comment.ml-2
-            = @comments.count
-  - @comments.each do |comment|
-    %ul.timeline
-      %li
-        / begin timeline-time
-        .timeline-time
-          %span.date= comment.created_at.to_date
-          %span.time= comment.created_at.strftime("%H:%M")
-        / end timeline-time
-        / begin timeline-icon
-        .timeline-icon
-          %a{href: "javascript:;"}  
-        / end timeline-icon
-        / begin timeline-body
-        .timeline-body
-          .timeline-header
-            %span.userimage
-              %img{alt: "", src: "https://bootdey.com/img/Content/avatar/avatar1.png"}/
-            %span.username
-              %a{href: "javascript:;"}= comment.author.name
-              %small
-          .timeline-content
-            %p= comment.html_body.html_safe
+= turbo_frame_tag 'search-results' do
+  .container
+    .card.mb-2
+      .card-body.p-2.p-sm-3
+        .media.forum-item
+          %a{"data-target" => ".forum-content", "data-toggle" => "collapse", href: "#"}
+            %img.mr-3.rounded-circle{alt: "User", src: "https://bootdey.com/img/Content/avatar/avatar1.png", width: "50"}/
+          .media-body
+            %h5
+              = "Subject: #{@ticket.subject}"
+              %span{class: status_klass(@ticket['status']) }= @ticket['status']
+            / %p= @ticket['description']
+            %p
+              %a.text-muted{"data-target" => ".forum-content", "data-toggle" => "collapse", href: "" }= "Created by #{@ticket.submitter.name} via #{@ticket['via']['channel'].eql?('api') ? 'web' : @ticket['via']['channel']}"
+            - if @ticket.assignee
+              %p.text-muted
+                %a{href: "javascript:void(0)"}= @ticket.assignee.name
+                responded on
+                %span.text-secondary.font-weight-bold= "#{@comments.last.created_at.to_date}, #{@comments.last.created_at.strftime("%H:%M")}"
+        .timeline-footer
+          %a.m-r-15.text-inverse-lighter.text-success{href: "javascript:;"}
+            %i.fa.fa-thumbs-up.fa-fw.m-r-3
+          %a.m-r-15.text-inverse-lighter{href: "javascript:;"}
+            %span
+              %i.far.fa-comment.ml-2
+              = @comments.count
+    - @comments.each do |comment|
+      %ul.timeline
+        %li
+          / begin timeline-time
+          .timeline-time
+            %span.date= comment.created_at.to_date
+            %span.time= comment.created_at.strftime("%H:%M")
+          / end timeline-time
+          / begin timeline-icon
+          .timeline-icon
+            %a{href: "javascript:;"}  
+          / end timeline-icon
+          / begin timeline-body
+          .timeline-body
+            .timeline-header
+              %span.userimage
+                %img{alt: "", src: "https://bootdey.com/img/Content/avatar/avatar1.png"}/
+              %span.username
+                %a{href: "javascript:;"}= comment.author.name
+                %small
+            .timeline-content
+              %p= comment.html_body.html_safe

@@ -16,8 +16,10 @@
           / Inner sidebar
           .inner-sidebar
             / Inner sidebar header
-            .inner-sidebar-header.justify-content-center.font-weight-bold
-              mSahay
+            .inner-sidebar-header.justify-content-center.font-weight-bold.h1
+              %i{class: 'fas fa-hands-helping', style: 'color: #dc3545'}
+              %span{style: 'color: #28a745'} m
+              %span{style: 'color: #dc3545'} Sahay
             / /Inner sidebar header
             / Inner sidebar body
             .inner-sidebar-body.p-0
@@ -30,12 +32,14 @@
                       .simplebar-content-wrapper{style: "height: 100%; overflow: hidden scroll;"}
                         .simplebar-content{style: "padding: 16px;"}
                           %nav.nav.nav-pills.nav-gap-y-1.flex-column
-                            %a.nav-link.nav-link-faded.has-icon.active{href: "javascript:void(0)"} All Threads
-                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Popular this week
-                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Popular all time
-                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Solved
-                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} Unsolved
-                            %a.nav-link.nav-link-faded.has-icon{href: "javascript:void(0)"} No replies yet
+                            %a.nav-link.nav-link-faded.has-icon{class: params[:status].blank? ? 'active' : '', href: root_path } All Tickets
+                            %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('new') ? 'active' : '', href: root_path(status: 'new')} New
+                            %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('pending') ? 'active' : '', href: root_path(status: 'pending')} Pending
+                            %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('open') ? 'active' : '', href: root_path(status: 'open')} Open
+                            %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('hold') ? 'active' : '', href: root_path(status: 'hold')} Hold
+                            %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('closed') ? 'active' : '', href: root_path(status: 'closed')} Closed
+                            %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('solved') ? 'active' : '', href: root_path(status: 'solved')} Solved
+
                   .simplebar-placeholder{style: "width: 234px; height: 292px;"}
                 .simplebar-track.simplebar-horizontal{style: "visibility: hidden;"}
                   .simplebar-scrollbar{style: "width: 0px; display: none;"}
@@ -55,12 +59,14 @@
                     %option{value: "3"} Unsolved
                     %option{value: "3"} No Replies Yet
                 .col-md-8
-                  %span.input-icon.input-icon-sm.ml-auto
-                    .row
-                      .col-md-6
-                        %input.form-control.bg-gray-200.border-gray-200.shadow-none.mb-4.mt-4{placeholder: "Search Tickets", type: "text"}
-                      .col-md-4
-                        %button.btn.btn-primary.mb-4.mt-4 Search
+                  %form{action: search_tickets_url, method: 'post', data: { turbo_frame: 'search-results' } }
+                    %span.input-icon.input-icon-sm.ml-auto
+                      .row
+                        .col-md-6
+                          %input.form-control.bg-gray-200.border-gray-200.shadow-none.mb-4.mt-4{placeholder: "Enter ticket number", type: "text", name: 'ticket_id'}
+                        .col-md-4
+                          %button.btn.btn-primary.f-s-12.rounded-corner.mb-4.mt-4{type: "submit"} Search
+                          / %button.btn.btn-primary.mb-4.mt-4 Search
                 .col-md-4
                   %button.btn.btn-success.has-icon.float-right{"data-target" => "#threadModal", "data-toggle" => "modal", type: "button"}
                     %svg.feather.feather-plus.mr-2{fill: "none", height: "24", stroke: "currentColor", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", viewbox: "0 0 24 24", width: "24", xmlns: "http://www.w3.org/2000/svg"}
@@ -68,6 +74,10 @@
                       %line{x1: "5", x2: "19", y1: "12", y2: "12"}
                     CREATE TICKET
             .inner-main-body.p-2.p-sm-3.collapse.forum-content.show
+              .row
+                %p.mx-auto
+                  We’re always here to help. For self-service, read our
+                  %a{href: 'https://emeritusprogramsupport.zendesk.com/hc/en-us' } FAQs.
               = yield
             / New Thread Modal
             #threadModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "threadModalLabel", role: "dialog", tabindex: "-1"}
@@ -89,3 +99,8 @@
                     .modal-footer
                       %button.btn.btn-light{"data-dismiss" => "modal", type: "button"} Cancel
                       %button.btn.btn-primary{type: "button"} Post
+%footer
+  .container
+    .row
+      %p.mx-auto.mt-2.mb-2
+        %u.font-weight-normal Crafted with love by the TechJot team in EmHack!
