@@ -3,5 +3,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "tickets#index"
-  resources :tickets
+  resources :tickets do
+    collection do
+      post :search
+    end
+  end
+
+  post '/launch' => 'tickets#launch'
+  get '/launch' => 'tickets#launch'
 end

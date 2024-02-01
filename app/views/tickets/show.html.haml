@@ -24,7 +24,7 @@
             %span
               %i.far.fa-comment.ml-2
               = @comments.count
-    - @comments.each do |comment|
+    - @comments.each_with_index do |comment, index|
       %ul.timeline
         %li
           / begin timeline-time
@@ -46,3 +46,22 @@
                 %small
             .timeline-content
               %p= comment.html_body.html_safe
+            - comment['attachments'].each do |attachment|
+              %hr
+                %p.m-t-20.mx-auto
+                  %img{alt: "", src: attachment['content_url'] }
+            - if (index + 1) == @comments.size
+              .timeline-comment-box
+                .user
+                  %img{src: "https://bootdey.com/img/Content/avatar/avatar6.png"}/
+                .input
+                  %form{action: ""}
+                    .row
+                      .input-group
+                        .col-md-10
+                          %input.form-control.rounded-corner{placeholder: "Write a reply...", type: "text"}/
+                        .col-md-2
+                          %span.input-group-btn.p-l-10
+                            %button.btn.btn-primary.f-s-12.rounded-corner.w-100{type: "button"} Reply
+
+

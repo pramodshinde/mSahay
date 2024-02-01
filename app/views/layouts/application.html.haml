@@ -29,7 +29,7 @@
                     .simplebar-height-auto-observer
                   .simplebar-mask
                     .simplebar-offset{style: "right: 0px; bottom: 0px;"}
-                      .simplebar-content-wrapper{style: "height: 100%; overflow: hidden scroll;"}
+                      .simplebar-content-wrapper
                         .simplebar-content{style: "padding: 16px;"}
                           %nav.nav.nav-pills.nav-gap-y-1.flex-column
                             %a.nav-link.nav-link-faded.has-icon{class: params[:status].blank? ? 'active' : '', href: root_path } All Tickets
@@ -40,7 +40,6 @@
                             %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('closed') ? 'active' : '', href: root_path(status: 'closed')} Closed
                             %a.nav-link.nav-link-faded.has-icon{class: params[:status].eql?('solved') ? 'active' : '', href: root_path(status: 'solved')} Solved
 
-                  .simplebar-placeholder{style: "width: 234px; height: 292px;"}
                 .simplebar-track.simplebar-horizontal{style: "visibility: hidden;"}
                   .simplebar-scrollbar{style: "width: 0px; display: none;"}
                 .simplebar-track.simplebar-vertical{style: "visibility: visible;"}
@@ -73,7 +72,9 @@
                       %line{x1: "12", x2: "12", y1: "5", y2: "19"}
                       %line{x1: "5", x2: "19", y1: "12", y2: "12"}
                     CREATE TICKET
-            .inner-main-body.p-2.p-sm-3.collapse.forum-content.show
+            .inner-main-body.collapse.forum-content.show
+              .row.m-1
+                = render 'layouts/flash_messages'
               .row
                 %p.mx-auto
                   We’re always here to help. For self-service, read our
@@ -83,22 +84,35 @@
             #threadModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "threadModalLabel", role: "dialog", tabindex: "-1"}
               .modal-dialog.modal-lg{role: "document"}
                 .modal-content
-                  %form
+                  %form{action: tickets_url, method: 'post', multipart: true, data: { turbo: false }, enctype: "multipart/form-data" }
                     .modal-header.d-flex.align-items-center.bg-primary.text-white
-                      %h6#threadModalLabel.modal-title.mb-0 New Discussion
+                      %h6#threadModalLabel.modal-title.mb-0 Create New Ticket
                       %button.close{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"}
                         %span{"aria-hidden" => "true"} ×
                     .modal-body
                       .form-group
-                        %label{for: "threadTitle"} Title
-                        %input#threadTitle.form-control{autofocus: "", placeholder: "Enter title", type: "text"}/
-                      %textarea.form-control.summernote{style: "display: none;"}
-                      .custom-file.form-control-sm.mt-3{style: "max-width: 300px;"}
-                        %input#customFile.custom-file-input{multiple: "multiple", type: "file"}/
-                        %label.custom-file-label{for: "customFile"} Attachment
+                        %input.form-control{placeholder: "Your Email Address", type: "text", name: 'tickets[email]', value: @user[:email] }
+                      .form-group
+                        %select.form-control{"aria-required" => "true", name: "tickets[query_type]", required: "required"}
+                          %option{label: "Select Topic", value: ""}
+                          %option{value: "understanding_the_course_content_and_the_assignment_requirements_portal"} Understanding the content and assignment requirements
+                          %option{value: "help_with_submissions__extensions__accessing_materials_and_everything_else_portal"} Help with submissions, accessing material, Certificates, and everything else
+                          %option{value: "enrollment__payment__certificates_portal"} Enrollment, Refund &amp; Payment
+                          %option{value: "assignment_extension"} Assignment extension
+                          %option{value: "help_with_submissions__extensions__accessing_materials_and_everything_else_portal"} I am not able to login
+                      .form-group
+                        %input.form-control{placeholder: "Enter Subject", type: "text", name: 'tickets[subject]', value: "New Ticket #{rand(1000)}"}
+                      .form-group
+                        - sample = 'Test descrition for a new ticket ' * 20
+                        %textarea.form-control.summernote{rows: 5, name: 'tickets[description]', placeholder: "Tell us more about what we can help with" } 
+                      .form-group
+                        %input.form-control{placeholder: "Canvas Course URL", type: "text", name: 'tickets[canvas_course_url]', value: "https://classroom.emeritus.org/courses/#{session[:canvas_course_id]}"}
+                      .form-group
+                        %label{for: "ticket-attachments"} Attachments
+                        %input#ticket-attachments.form-control-file{multiple: "multiple", type: "file", name: "tickets[attachments][]"}
                     .modal-footer
                       %button.btn.btn-light{"data-dismiss" => "modal", type: "button"} Cancel
-                      %button.btn.btn-primary{type: "button"} Post
+                      %button.btn.btn-primary{type: "submit"} Submit
 %footer
   .container
     .row

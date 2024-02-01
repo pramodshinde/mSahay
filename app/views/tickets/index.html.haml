@@ -14,7 +14,7 @@
             %tr
               %th{scope: "row"}= ticket['id']
               %td
-                = link_to ticket['subject'].truncate(80), ticket_path(id: ticket['id'])
+                = link_to ticket['subject'].truncate(50), ticket_path(id: ticket['id'])
               %td= ticket['created_at'].to_datetime.strftime('%b-%d-%Y %H:%M')
               %td= ticket['via']['channel'].eql?('api') ? 'web' : ticket['via']['channel']
               %td.m-1{class: status_klass(ticket['status']) }= ticket['status']
@@ -23,7 +23,7 @@
       .col-md-2
       .col-md-8
         %p.m-3.mx-auto
-          %p Dear Valued User,
+          %p Dear #{session[:canvas_user_name]}
           If you're encountering an issue or have a query that requires assistance, we're here to help! To ensure prompt and effective support, please take a moment to create a new support ticket by providing details of your issue or inquiry using the following link.
         %button.btn.btn-success.has-icon.mx-auto{"data-target" => "#threadModal", "data-toggle" => "modal", type: "button"}
           %svg.feather.feather-plus.mr-2{fill: "none", height: "24", stroke: "currentColor", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", viewbox: "0 0 24 24", width: "24", xmlns: "http://www.w3.org/2000/svg"}
@@ -31,19 +31,3 @@
             %line{x1: "5", x2: "19", y1: "12", y2: "12"}
           CREATE TICKET
       .col-md-2
-
-/ %button.btn.btn-primary{"data-target" => "#exampleModal", "data-toggle" => "modal", type: "button"}
-/   Launch demo modal
-/ / Modal
-/ #exampleModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", role: "dialog", tabindex: "-1"}
-/   .modal-dialog{role: "document"}
-/     .modal-content
-/       .modal-header
-/         %h5#exampleModalLabel.modal-title Modal title
-/         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"}
-/           %span{"aria-hidden" => "true"} ×
-/       .modal-body
-/         \...
-/       .modal-footer
-/         %button.btn.btn-secondary{"data-dismiss" => "modal", type: "button"} Close
-/         %button.btn.btn-primary{type: "button"} Save changes

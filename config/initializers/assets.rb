@@ -12,3 +12,9 @@ Rails.application.config.assets.version = "1.0"
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 Rails.application.config.assets.precompile += %w(bootstrap.min.js popper.js jquery.min.js)
+
+Rails.application.config.session_store  :cookie_store,
+                                        key: '_m_sahay_lti',
+                                        secure: true,
+                                        same_site: 'None'
+
